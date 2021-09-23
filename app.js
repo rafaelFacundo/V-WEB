@@ -13,16 +13,13 @@ app.get("/", (req,res) => {
 })
 
 app.post('/', urlencodedParser, function (req, res) {
-    fs.readFile(__dirname + '/public/itens.json', 'utf8', function readFileCallback(err, data){
-        if (err){
-            console.log(err);
-        } else {
-        obj = JSON.parse(data); //transforma o conteudo do arquivo em objeto
-        obj.lista.push({id: id, item:req.body.item}); //insere o novo item que veio do formulario
-        json = JSON.stringify(obj); //transforma o objeto em json de volta
-        fs.writeFile(__dirname + '/public/itens.json', json, ()=>{}); //sobrescreve o json antigo
-    }});
+    let data = fs.readFileSync(__dirname + '/public/itens.json')
+    obj = JSON.parse(data); //transforma o conteudo do arquivo em objeto
+    obj.lista.push({id: id, item:req.body.item}); //insere o novo item que veio do formulario
+    json = JSON.stringify(obj); //transforma o objeto em json de volta
+    fs.writeFileSync(__dirname + '/public/itens.json', json); //sobrescreve o json antigo
     id+=1;
+    
     res.sendFile(__dirname + '/public/index.html');
  })
 
